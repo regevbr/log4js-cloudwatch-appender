@@ -1,6 +1,6 @@
 {
   "name": "log4js-cloudwatch-appender",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "log4js aws cloudwatch appender",
   "main": "lib/index.js",
   "scripts": {
