@@ -98,6 +98,8 @@ Which will output:
 The layout:
 
 ```js
+const util = require('util');
+
 let processName = path.basename(process.argv[1]);
 processName = processName.substring(0, processName.length - 3);
 
@@ -158,6 +160,32 @@ const jsonLayout = {
     }
   }
 };
+
+function wrapErrorsWithInspect(items) {
+  return items.map(function (item) {
+    if ((item instanceof Error) && item.stack) {
+      return {
+        inspect: function () {
+          return util.format(item) + '\n' + item.stack;
+        }
+      };
+    } else {
+      return item;
+    }
+  });
+}
+
+function escapedStringify(json) {
+  return json
+    .replace(/[\\]/g, '\\\\')
+    .replace(/[\"]/g, '\\\"')
+    .replace(/[\/]/g, '\\/')
+    .replace(/[\b]/g, '\\b')
+    .replace(/[\f]/g, '\\f')
+    .replace(/[\n]/g, '\\n')
+    .replace(/[\r]/g, '\\r')
+    .replace(/[\t]/g, '\\t');
+}
 ```
 
 ## Contributing
