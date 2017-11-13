@@ -10,135 +10,157 @@
 
 [![https://nodei.co/npm/log4js-cloudwatch-appender.png?downloads=true&downloadRank=true&stars=true](https://nodei.co/npm/log4js-cloudwatch-appender.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/log4js-cloudwatch-appender)
 
-
-
-# busywait.js
-Simple Async busy wait module for Node.JS
+# log4js-cloudwatch-appender
+Simple appender for log4js to submit logs to AWS cloudwatch based on the [lawgs](https://github.com/mentum/lawgs) module.
 
 ## Installation
 
 This module is installed via npm:
 
 ```
-npm install --save busywait
+npm install --save log4js-cloudwatch-appender
 ```
 
 ## Usage
 
-Running:
+Add aws appender to the log4js config file:
 ```js
-const busywait = require('../lib/index').sync;
-
-const waitUntil = Date.now() + 2500;
-
-function syncCheck(iteration) {
-    console.log('running iteration', iteration);
-    return Date.now() > waitUntil;
+const config = {
+    appenders: {
+        aws: {
+              type: "log4js-cloudwatch-appender",
+              accessKeyId: '<accessKeyId>',
+              secretAccessKey: '<secretAccessKey>',
+              region: 'eu-central-1',
+              logGroup: 'prod',
+              logStream: 'apps',
+              layout: '<custom layout object>'
+            }
+    },
+    categories: {
+        default: {appenders: ['aws'], level: 'info'}
+    }
 }
-
-busywait(syncCheck, {
-    sleepTime: 500,
-    maxChecks: 20
-})
-    .then(function (result) {
-        console.log('finished after', result.iterations, 'iterations', 'with' +
-            ' result', result.result);
-    });
 ```
-or:
+
+This will cause logs to be sent to AWS CloudWatch with the specified group and stream.
+
+## Configuration
+
+
+If you are using roles, you will need the following roles:
+- logs:DescribeLogGroups
+- logs:DescribeLogStreams
+- logs:CreateLogGroup
+- logs:CreateLogStream
+- logs:PutLogEvents
+
+### mandatory
+
+- `region` - The CloudWatch region 
+- `logGroup` - The log group to send the metrics to
+- `logStream` - The log stream of the group to send the metrics to
+
+### optional
+
+- `accessKeyId` - Optional if credentials are set in `~/.aws/credentials`
+- `secretAccessKey` - Optional if credentials are set in `~/.aws/credentials`
+- `layout` - Custom layout. See [suggested layout](#Suggested-json-layout)
+
+## Suggested json layout
+
+Logs are easier to query whn they are formatted as json. 
+Following is a suggested json layout to set for this appender. 
+The logging style should be:
+
 ```js
-const busywait = require('../lib/index').async;
+const uuid = require('node-uuid');
+const corr = uuid.v4();
+const logger = logFactory.getLogger('category');
 
-const waitUntil = Date.now() + 2500;
+logger.info(corr, 'methodName()','part1','part2');
+```
 
-function asyncCheck(iteration) {
-    return new Promise(function (resolve, reject) {
-        console.log('running iteration', iteration);
-        if (Date.now() > waitUntil) {
-            return resolve(true);
-        } else {
-            return reject();
+Which will output:
+```json
+{
+  "timestamp": "2017-06-10T11:55:38.251Z",
+  "app": "<appName>",
+  "host": "<ip>",
+  "pid": 24532,
+  "level": "INFO",
+  "category": "category",
+  "method": "methodName()",
+  "message": "part1 part2"
+}
+```
+
+The layout:
+
+```js
+let processName = path.basename(process.argv[1]);
+processName = processName.substring(0, processName.length - 3);
+
+const publicIp = require('public-ip').v4;
+let ip = '';
+publicIp()
+  .then(function (_ip) {
+    ip = _ip;
+  })
+  .catch(function (e) {
+    console.log(e);
+    ip = 'unknown';
+  });
+
+const jsonLayout = {
+  "type": "pattern",
+  "pattern": '{"timestamp": "%d{yyyy-MM-ddThh:mm:ss.SSSZ}", "app": "' + processName + '", "ip": "%x{my_ip}", "host": "%h", "pid": %z, "level": "%p", "category": "%c"%x{corr}%x{method}, "message": "%x{message}"}',
+  "tokens": {
+    "my_ip": function () {
+      return ip;
+    },
+    "corr": function (logEvent) {
+      if (logEvent.data) {
+        var corr = logEvent.data[0];
+        if (Array.isArray(corr) && corr.length === 2) {
+          corr = corr[0];
+          if (typeof corr === 'string' && corr.length === 36 && corr.split("-").length === 5) {
+            logEvent.data[0] = logEvent.data[0][1];
+            return ', "corr": "' + corr + '"';
+          }
         }
-    });
-}
-
-busywait(asyncCheck, {
-    sleepTime: 500,
-    maxChecks: 20
-})
-    .then(function (result) {
-        console.log('finished after', result.iterations, 'iterations', 'with' +
-            ' result', result.result);
-    });
+        if (logEvent.data.length > 1 && corr && typeof corr === 'string' && corr.length === 36 && corr.split("-").length === 5) {
+          logEvent.data.shift();
+          return ', "corr": "' + corr + '"';
+        }
+      }
+      return '';
+    },
+    "method": function (logEvent) {
+      if (logEvent.data) {
+        var method = logEvent.data[0];
+        if (logEvent.data.length > 1 && method && typeof method === 'string' && method.indexOf("()", method.length - 2) !== -1) {
+          logEvent.data.shift();
+          return ', "method": "' + method + '"';
+        }
+      }
+      return '';
+    },
+    "message": function (logEvent) {
+      if (logEvent.data) {
+        var data = logEvent.data;
+        data = util.format.apply(util, wrapErrorsWithInspect(data));
+        data = escapedStringify(data);
+        logEvent.data = undefined;
+        return data;
+      }
+      return '';
+    }
+  }
+};
 ```
-Will result in:
-```
-running iteration 1
-running iteration 2
-running iteration 3
-running iteration 4
-running iteration 5
-running iteration 6
-finished after 6 iterations with result true
-```
 
-## Methods
+## Contributing
 
-### sync(syncCheckFn, options): Promise
-
-The `syncCheckFn` first argument is the function to run on each iteration.
-`syncCheckFn` must be a function with a boolean return value.
-The current iteration number will be passed as first argument to every call of `syncCheckFn`. 
-
-#### Options
-
-##### mandatory
-
-- `sleepTime` - Time in ms to wait between checks  
-- `maxChecks` - The max number of checks to perform before failing 
-
-##### optional
-
-- `waitFirst` - Should we wait the `sleepTime` before performing the first check (default: false)  
-- `failMsg` - Custom error message to reject the promise with
-
-#### Return value
-
-Return value is a promise.
-- The promise will be resolved if the `syncCheckFn` returned true within a
-legal number of checks.
-- The promise will be rejected if the `syncCheckFn` rejected `maxChecks`
-times.
-
-Promise resolved value:
-- `iterations` - The number of iterations it took to finish
-- `result` - Constant `true`
-
-### async(asyncCheckFn, options): Promise
-
-The `asyncCheckFn` first argument is the function to run on each iteration.
-`syncCheckFn` must be a function with a promise return value.
-The current iteration number will be passed as first argument to every call of `asyncCheckFn`. 
-
-#### Options
-
-##### mandatory
-
-- `sleepTime` - Time in ms to wait between checks  
-- `maxChecks` - The max number of checks to perform before failing 
-
-##### optional
-
-- `waitFirst` - Should we wait the `sleepTime` before performing the first check (default: false)  
-- `failMsg` - Custom error message to reject the promise with
-
-#### Return value
-
-Return value is a promise.
-- The promise will be resolved if the `asyncCheckFn` was resolved within a
-legal number of checks.
-- The promise will be rejected if the `asyncCheckFn` rejected `maxChecks` times.
-
-Promise resolved value:
-- `iterations` - The number of iterations it took to finish
-- `result` - The resolved value of `asyncCheckFn`
+Please make all pull requests to the `master` branch and ensure tests pass
+locally.
