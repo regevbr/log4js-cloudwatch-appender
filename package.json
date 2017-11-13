@@ -20,7 +20,10 @@
     "watch",
     "logs",
     "log",
-    "cw"
+    "cw",
+    "node",
+    "nodejs",
+    "javascript"
   ],
   "author": "Regev Brody <regevbr@gmail.com>",
   "engines": {
