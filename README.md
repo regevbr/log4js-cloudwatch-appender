@@ -1,14 +1,14 @@
-[![Build Status](https://travis-ci.org/regevbr/busywait.js.svg?branch=master)](https://travis-ci.org/regevbr/busywait.js)
-[![Coverage Status](https://coveralls.io/repos/github/regevbr/busywait.js/badge.svg)](https://coveralls.io/github/regevbr/busywait.js)
-[![bitHound Overall Score](https://www.bithound.io/github/regevbr/busywait.js/badges/score.svg)](https://www.bithound.io/github/regevbr/busywait.js)
-[![Known Vulnerabilities](https://snyk.io/test/github/regevbr/busywait.js/badge.svg)](https://snyk.io/test/github/regevbr/busywait.js)
-[![dependencies Status](https://david-dm.org/regevbr/busywait.js/status.svg)](https://david-dm.org/regevbr/busywait.js)
-[![devDependencies Status](https://david-dm.org/regevbr/busywait.js/dev-status.svg)](https://david-dm.org/regevbr/busywait.js?type=dev)
-[![npm](https://img.shields.io/npm/dt/busywait.svg)](https://github.com/regevbr/busywait.js)
-[![HitCount](http://hits.dwyl.io/regevbr/busywait.js.svg)](http://hits.dwyl.io/regevbr/busywait.js)
+[![Build Status](https://travis-ci.org/regevbr/log4js-cloudwatch-appender.svg?branch=master)](https://travis-ci.org/regevbr/log4js-cloudwatch-appender)
+[![Coverage Status](https://coveralls.io/repos/github/regevbr/log4js-cloudwatch-appender/badge.svg)](https://coveralls.io/github/regevbr/log4js-cloudwatch-appender)
+[![bitHound Overall Score](https://www.bithound.io/github/regevbr/log4js-cloudwatch-appender/badges/score.svg)](https://www.bithound.io/github/regevbr/log4js-cloudwatch-appender)
+[![Known Vulnerabilities](https://snyk.io/test/github/regevbr/log4js-cloudwatch-appender/badge.svg)](https://snyk.io/test/github/regevbr/log4js-cloudwatch-appender)
+[![dependencies Status](https://david-dm.org/regevbr/log4js-cloudwatch-appender/status.svg)](https://david-dm.org/regevbr/log4js-cloudwatch-appender)
+[![devDependencies Status](https://david-dm.org/regevbr/log4js-cloudwatch-appender/dev-status.svg)](https://david-dm.org/regevbr/log4js-cloudwatch-appender?type=dev)
+[![npm](https://img.shields.io/npm/dt/log4js-cloudwatch-appender.svg)](https://github.com/regevbr/log4js-cloudwatch-appender)
+[![HitCount](http://hits.dwyl.io/regevbr/log4js-cloudwatch-appender.svg)](http://hits.dwyl.io/regevbr/log4js-cloudwatch-appender)
 
 
-[![https://nodei.co/npm/busywait.png?downloads=true&downloadRank=true&stars=true](https://nodei.co/npm/busywait.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/busywait)
+[![https://nodei.co/npm/log4js-cloudwatch-appender.png?downloads=true&downloadRank=true&stars=true](https://nodei.co/npm/log4js-cloudwatch-appender.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/log4js-cloudwatch-appender)
 
 
 
