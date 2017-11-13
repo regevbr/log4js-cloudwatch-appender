@@ -57,7 +57,7 @@ describe('log4js-cloudwatch-appender', function () {
     before(function (done) {
 
         delete require.cache['../lib/index.js'];
-        delete require.cache['lawgs'];
+        delete require.cache.lawgs;
         appender = sandbox.require('../lib/index.js', {
             requires: {
                 'lawgs': fakeLawgs
