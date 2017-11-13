@@ -19,6 +19,8 @@ const CUSTOM_LAYOUT = {
 
 describe('log4js-cloudwatch-appender', function () {
 
+    sandbox.registerBuiltInSourceTransformer('istanbul');
+
     let config, group, stream, data, appender, layout, type, loggingEvent, timezoneOffset;
 
     function basicLayout(_loggingEvent, _timezoneOffset) {
