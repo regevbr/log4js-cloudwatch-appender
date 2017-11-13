@@ -85,6 +85,7 @@ Which will output:
 ```json
 {
   "timestamp": "2017-06-10T11:55:38.251Z",
+  "corr": "2e2c99aa-7eee-4fd2-ae36-cd9dc9533816",
   "app": "<appName>",
   "host": "<ip>",
   "pid": 24532,
@@ -123,7 +124,7 @@ const jsonLayout = {
     },
     "corr": function (logEvent) {
       if (logEvent.data) {
-        var corr = logEvent.data[0];
+        let corr = logEvent.data[0];
         if (Array.isArray(corr) && corr.length === 2) {
           corr = corr[0];
           if (typeof corr === 'string' && corr.length === 36 && corr.split("-").length === 5) {
@@ -140,7 +141,7 @@ const jsonLayout = {
     },
     "method": function (logEvent) {
       if (logEvent.data) {
-        var method = logEvent.data[0];
+        const method = logEvent.data[0];
         if (logEvent.data.length > 1 && method && typeof method === 'string' && method.indexOf("()", method.length - 2) !== -1) {
           logEvent.data.shift();
           return ', "method": "' + method + '"';
@@ -150,7 +151,7 @@ const jsonLayout = {
     },
     "message": function (logEvent) {
       if (logEvent.data) {
-        var data = logEvent.data;
+        let data = logEvent.data;
         data = util.format.apply(util, wrapErrorsWithInspect(data));
         data = escapedStringify(data);
         logEvent.data = undefined;
