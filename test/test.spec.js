@@ -1,6 +1,7 @@
 "use strict";
 
 const expect = require('expect.js');
+require('../lib/index.js');
 const sandbox = require('sandboxed-module');
 
 const ACCESS_KEY = 'ACCESS_KEY';
