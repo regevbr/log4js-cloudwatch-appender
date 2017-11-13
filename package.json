@@ -1,10 +1,10 @@
 {
   "name": "log4js-cloudwatch-appender",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "log4js aws cloudwatch appender",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "make test"
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,10 @@
     "log",
     "cw"
   ],
-  "author": "regevbr",
+  "author": "Regev Brody <regevbr@gmail.com>",
+  "engines": {
+    "node": ">=6.11.3"
+  },
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/regevbr/log4js-cloudwatch-appender/issues"
@@ -30,5 +33,14 @@
   "homepage": "https://github.com/regevbr/log4js-cloudwatch-appender#readme",
   "dependencies": {
     "lawgs": "^1.0.4"
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.0",
+    "expect.js": "^0.3.1",
+    "istanbul": "^0.4.5",
+    "jshint": "^2.9.5",
+    "mocha": "^4.0.1",
+    "mocha-lcov-reporter": "^1.3.0",
+    "sandboxed-module": "^2.0.3"
   }
 }
