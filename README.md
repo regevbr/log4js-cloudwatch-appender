@@ -65,7 +65,7 @@ If you are using roles, you will need the following roles:
 
 - `accessKeyId` - Optional if credentials are set in `~/.aws/credentials`
 - `secretAccessKey` - Optional if credentials are set in `~/.aws/credentials`
-- `layout` - Custom layout. See [suggested layout](#Suggested-json-layout)
+- `layout` - Custom layout. See [suggested layout](#suggested-json-layout)
 
 ## Suggested json layout
 
