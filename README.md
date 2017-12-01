@@ -100,6 +100,7 @@ The layout:
 
 ```js
 const util = require('util');
+const _ = require('underscore');
 
 let processName = path.basename(process.argv[1]);
 processName = processName.substring(0, processName.length - 3);
@@ -122,39 +123,40 @@ const jsonLayout = {
     "my_ip": function () {
       return ip;
     },
-    "corr": function (logEvent) {
-      if (logEvent.data) {
-        let corr = logEvent.data[0];
+   "corr": function (logEvent) {
+      logEvent.__data__ = _.map(logEvent.data, _.clone);
+      if (logEvent.__data__) {
+        let corr = logEvent.__data__[0];
         if (Array.isArray(corr) && corr.length === 2) {
           corr = corr[0];
           if (typeof corr === 'string' && corr.length === 36 && corr.split("-").length === 5) {
-            logEvent.data[0] = logEvent.data[0][1];
+            logEvent.__data__[0] = logEvent.__data__[0][1];
             return ', "corr": "' + corr + '"';
           }
         }
-        if (logEvent.data.length > 1 && corr && typeof corr === 'string' && corr.length === 36 && corr.split("-").length === 5) {
-          logEvent.data.shift();
+        if (logEvent.__data__.length > 1 && corr && typeof corr === 'string' && corr.length === 36 && corr.split("-").length === 5) {
+          logEvent.__data__.shift();
           return ', "corr": "' + corr + '"';
         }
       }
       return '';
     },
     "method": function (logEvent) {
-      if (logEvent.data) {
-        const method = logEvent.data[0];
-        if (logEvent.data.length > 1 && method && typeof method === 'string' && method.indexOf("()", method.length - 2) !== -1) {
-          logEvent.data.shift();
+      if (logEvent.__data__) {
+        const method = logEvent.__data__[0];
+        if (logEvent.__data__.length > 1 && method && typeof method === 'string' && method.indexOf("()", method.length - 2) !== -1) {
+          logEvent.__data__.shift();
           return ', "method": "' + method + '"';
         }
       }
       return '';
     },
     "message": function (logEvent) {
-      if (logEvent.data) {
-        let data = logEvent.data;
+      if (logEvent.__data__) {
+        let data = logEvent.__data__;
         data = util.format.apply(util, wrapErrorsWithInspect(data));
         data = escapedStringify(data);
-        logEvent.data = undefined;
+        logEvent.__data__ = undefined;
         return data;
       }
       return '';
