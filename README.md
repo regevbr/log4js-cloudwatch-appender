@@ -34,7 +34,8 @@ const config = {
               region: 'eu-central-1',
               logGroup: 'prod',
               logStream: 'apps',
-              layout: '<custom layout object>'
+              layout: '<custom layout object>',
+              lawgsConfig: '<optional alwgs config object>'
             }
     },
     categories: {
@@ -66,6 +67,10 @@ If you are using roles, you will need the following roles:
 - `accessKeyId` - Optional if credentials are set in `~/.aws/credentials`
 - `secretAccessKey` - Optional if credentials are set in `~/.aws/credentials`
 - `layout` - Custom layout. See [suggested layout](#suggested-json-layout)
+- `lawgsConfig` - Optional vonfig object for lawgs:
+    - `showDebugLogs` - Show debug logs. Default: false.
+    - `uploadMaxTimer` - After this ms timeout, flush to server. Default: 5000.
+    - `uploadBatchSize` - After this amount of logs, flush to server. Default: 500.
 
 ## Suggested json layout
 

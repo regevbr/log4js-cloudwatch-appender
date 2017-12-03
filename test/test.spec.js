@@ -16,12 +16,17 @@ const CUSTOM_LAYOUT_TYPE = 'CUSTOM_LAYOUT_TYPE';
 const CUSTOM_LAYOUT = {
     type: CUSTOM_LAYOUT_TYPE
 };
+const CUSTOM_LAWGS_CONFIG = {
+    showDebugLogs: true,
+    uploadMaxTimer: 6000,
+    uploadBatchSize: 600
+};
 
 describe('log4js-cloudwatch-appender', function () {
 
     sandbox.registerBuiltInSourceTransformer('istanbul');
 
-    let config, group, stream, data, appender, layout, type, loggingEvent, timezoneOffset;
+    let config, group, stream, data, appender, layout, type, loggingEvent, timezoneOffset,customConfig;
 
     function basicLayout(_loggingEvent, _timezoneOffset) {
         loggingEvent = _loggingEvent;
@@ -33,6 +38,9 @@ describe('log4js-cloudwatch-appender', function () {
         log: function (_stream, _data) {
             stream = _stream;
             data = _data;
+        },
+        config: function(config) {
+            customConfig = config;
         }
     };
 
@@ -81,6 +89,23 @@ describe('log4js-cloudwatch-appender', function () {
         expect(config.aws.secretAccessKey).to.be(SECRET_KEY);
         expect(config.aws.region).to.be(REGION);
         expect(group).to.be(LOG_GROUP);
+        expect(customConfig).to.be(undefined);
+        done();
+    });
+
+    it('should configure lawgs properly with proper config', function (done) {
+        appender.configure({
+            accessKeyId: ACCESS_KEY,
+            secretAccessKey: SECRET_KEY,
+            region: REGION,
+            logGroup: LOG_GROUP,
+            lawgsConfig: CUSTOM_LAWGS_CONFIG
+        }, layouts);
+        expect(config.aws.accessKeyId).to.be(ACCESS_KEY);
+        expect(config.aws.secretAccessKey).to.be(SECRET_KEY);
+        expect(config.aws.region).to.be(REGION);
+        expect(group).to.be(LOG_GROUP);
+        expect(customConfig).to.be(CUSTOM_LAWGS_CONFIG);
         done();
     });
 
