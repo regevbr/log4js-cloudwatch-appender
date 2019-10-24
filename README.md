@@ -35,7 +35,7 @@ const config = {
               logGroup: 'prod',
               logStream: 'apps',
               layout: '<custom layout object>',
-              lawgsConfig: '<optional alwgs config object>'
+              lawgsConfig: '<optional lawgs config object>'
             }
     },
     categories: {
@@ -67,14 +67,14 @@ If you are using roles, you will need the following roles:
 - `accessKeyId` - Optional if credentials are set in `~/.aws/credentials`
 - `secretAccessKey` - Optional if credentials are set in `~/.aws/credentials`
 - `layout` - Custom layout. See [suggested layout](#suggested-json-layout)
-- `lawgsConfig` - Optional vonfig object for lawgs:
+- `lawgsConfig` - Optional config object for lawgs:
     - `showDebugLogs` - Show debug logs. Default: false.
     - `uploadMaxTimer` - After this ms timeout, flush to server. Default: 5000.
     - `uploadBatchSize` - After this amount of logs, flush to server. Default: 500.
 
 ## Suggested json layout
 
-Logs are easier to query whn they are formatted as json. 
+Logs are easier to query when they are formatted as json. 
 Following is a suggested json layout to set for this appender. 
 The logging style should be:
 
